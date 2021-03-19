@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  //new运算符的作用： 
+    // 1.执行函数；
+    // 2.自动创建一个空对象； 即 省略下面工厂模式中的 let obj = {};
+    // 3.把创建的对象指向另一个对象； 即 上面的obj等于下面实例化的tab1
+    // 4.把空对象和函数里的this衔接起来；即 this指向实例化对象
+    // 5.隐式返回this; 即 最后不需要return obj;
+
+  //简化工厂模式 即 转化为构造函数
+
+  // function Tab(){
+  //   let obj = {};
+  //   obj.name = "张三";
+  //   obj.hobby = function(){
+  //     console.log("打篮球。。。");
+  //   };
+  //   return obj;
+  // }
+  // Tab();
+
+  // 使用 new 关键字实例化即构造函数形式
+    // 1.约定俗成：首字母大写
+    // 2.属性（名词）放在构造函数里，方法（动词）放在原型
+    // 3.实例化出来的对象赋值给另一个变量，要想获取它的原型就用 obj.__proto__ 的格式
+    // console.log(tab1.__proto__ === Tab.prototype); 结果为true
+    function Tab(){
+      // let obj = {}; 自动创建一个空对象，即不需要这一步 此obj===this
+      // obj.name = "张三"; //可以把obj.name 换成this.name
+      this.name = "张三";
+      // obj.hobby = function(){
+      //   console.log("打篮球。。。");
+      // };
+      // this.hobby = function(){
+      //   console.log("打篮球。。。");
+      // };
+      // return obj; 
+    }
+    //使用Tab.prototype.psFor原型可以解决工厂模式中资源浪费问题
+    
+    Tab.prototype.hobby = function(){
+      console.log("打篮球。。。");
+    };
+    
+    Tab.prototype.psFor = function(){
+      console.log("psFor.....");
+    }
+  //每个原型上都有一个预定义属性：constructor 指向 构造函数
+    //要想如下这样写必须添加constructor属性指向Tab
+    // Tab.prototype = {
+    //   constructor:Tab,
+    //   psFor(){
+    //     console.log("psFor...");
+    //   },
+    //   hobby(){
+    //     console.log("hobby...");
+    //   }
+    // }
+
+    // let tab1 = new Tab();
+    // console.log(tab1.__proto__ === Tab.prototype); 结果为true
+
+    // console.log(tab1.name);
+    // tab1.hobby();
+    // let tab2 = new Tab();
+    // console.log(tab1.psFor === tab2.psFor);  //结果为true
+
+
+    //仿写new运算符
+    function myNew(constructor,...arg){
+      let obj = {};
+      constructor.call(obj,...arg);
+      obj.__proto__ = constructor.prototype;
+      return obj;
+    }
+    let tab1 = myNew(Tab);
+    console.log(tab1.name);       
+    tab1.hobby();
+  </script>
+</body>
+</html>
